@@ -183,6 +183,8 @@ Error_Handler();
   MX_SDMMC1_MMC_Init();
   MX_FATFS_Init();
   MX_TouchGFX_Init();
+  /* Call PreOsInit function */
+  MX_TouchGFX_PreOSInit();
   /* USER CODE BEGIN 2 */
   if (!debugMessageChanged) debug("Main initialization completed.");
   /* USER CODE END 2 */
