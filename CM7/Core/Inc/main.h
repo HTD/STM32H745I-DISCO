@@ -68,6 +68,8 @@ void debug(char* msg);
 #define FRAME_RATE_GPIO_Port GPIOG
 #define MCU_ACTIVE_Pin GPIO_PIN_6
 #define MCU_ACTIVE_GPIO_Port GPIOA
+#define VBUS_Drive_Pin GPIO_PIN_5
+#define VBUS_Drive_GPIO_Port GPIOC
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
