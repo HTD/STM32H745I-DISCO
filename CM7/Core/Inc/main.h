@@ -54,10 +54,9 @@ extern uint8_t debugMessageChanged;
 
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);
-void debug(char* msg);
 
 /* USER CODE BEGIN EFP */
-
+void debug(char* msg);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
