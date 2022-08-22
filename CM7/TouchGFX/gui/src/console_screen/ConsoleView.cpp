@@ -1,4 +1,5 @@
 #include <gui/console_screen/ConsoleView.hpp>
+#include <string.h>
 
 ConsoleView::ConsoleView()
 {
