@@ -59,13 +59,15 @@ QSPI_HandleTypeDef hqspi;
 
 MMC_HandleTypeDef hmmc1;
 
+SPI_HandleTypeDef hspi2;
+
 SDRAM_HandleTypeDef hsdram2;
 
 /* Definitions for defaultTask */
 osThreadId_t defaultTaskHandle;
 const osThreadAttr_t defaultTask_attributes = {
   .name = "defaultTask",
-  .stack_size = 128 * 4,
+  .stack_size = 1024 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
 /* Definitions for TouchGFXTask */
@@ -89,6 +91,7 @@ static void MX_LTDC_Init(void);
 static void MX_CRC_Init(void);
 static void MX_DMA2D_Init(void);
 static void MX_SDMMC1_MMC_Init(void);
+static void MX_SPI2_Init(void);
 void StartDefaultTask(void *argument);
 void TouchGFX_Task(void *argument);
 
@@ -180,12 +183,14 @@ Error_Handler();
   MX_LTDC_Init();
   MX_CRC_Init();
   MX_DMA2D_Init();
-  MX_SDMMC1_MMC_Init();
   MX_FATFS_Init();
+  MX_SDMMC1_MMC_Init();
+  MX_SPI2_Init();
   MX_TouchGFX_Init();
   /* Call PreOsInit function */
   MX_TouchGFX_PreOSInit();
   /* USER CODE BEGIN 2 */
+
   if (!debugMessageChanged) debug("Main initialization completed.");
   /* USER CODE END 2 */
 
@@ -477,7 +482,7 @@ static void MX_SDMMC1_MMC_Init(void)
   hmmc1.Init.ClockPowerSave = SDMMC_CLOCK_POWER_SAVE_DISABLE;
   hmmc1.Init.BusWide = SDMMC_BUS_WIDE_8B;
   hmmc1.Init.HardwareFlowControl = SDMMC_HARDWARE_FLOW_CONTROL_DISABLE;
-  hmmc1.Init.ClockDiv = 4;
+  hmmc1.Init.ClockDiv = 1;
   if (HAL_MMC_Init(&hmmc1) != HAL_OK)
   {
     Error_Handler();
@@ -485,6 +490,54 @@ static void MX_SDMMC1_MMC_Init(void)
   /* USER CODE BEGIN SDMMC1_Init 2 */
 
   /* USER CODE END SDMMC1_Init 2 */
+
+}
+
+/**
+  * @brief SPI2 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_SPI2_Init(void)
+{
+
+  /* USER CODE BEGIN SPI2_Init 0 */
+
+  /* USER CODE END SPI2_Init 0 */
+
+  /* USER CODE BEGIN SPI2_Init 1 */
+
+  /* USER CODE END SPI2_Init 1 */
+  /* SPI2 parameter configuration*/
+  hspi2.Instance = SPI2;
+  hspi2.Init.Mode = SPI_MODE_MASTER;
+  hspi2.Init.Direction = SPI_DIRECTION_2LINES;
+  hspi2.Init.DataSize = SPI_DATASIZE_4BIT;
+  hspi2.Init.CLKPolarity = SPI_POLARITY_LOW;
+  hspi2.Init.CLKPhase = SPI_PHASE_1EDGE;
+  hspi2.Init.NSS = SPI_NSS_SOFT;
+  hspi2.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
+  hspi2.Init.FirstBit = SPI_FIRSTBIT_MSB;
+  hspi2.Init.TIMode = SPI_TIMODE_DISABLE;
+  hspi2.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
+  hspi2.Init.CRCPolynomial = 0x0;
+  hspi2.Init.NSSPMode = SPI_NSS_PULSE_ENABLE;
+  hspi2.Init.NSSPolarity = SPI_NSS_POLARITY_LOW;
+  hspi2.Init.FifoThreshold = SPI_FIFO_THRESHOLD_01DATA;
+  hspi2.Init.TxCRCInitializationPattern = SPI_CRC_INITIALIZATION_ALL_ZERO_PATTERN;
+  hspi2.Init.RxCRCInitializationPattern = SPI_CRC_INITIALIZATION_ALL_ZERO_PATTERN;
+  hspi2.Init.MasterSSIdleness = SPI_MASTER_SS_IDLENESS_00CYCLE;
+  hspi2.Init.MasterInterDataIdleness = SPI_MASTER_INTERDATA_IDLENESS_00CYCLE;
+  hspi2.Init.MasterReceiverAutoSusp = SPI_MASTER_RX_AUTOSUSP_DISABLE;
+  hspi2.Init.MasterKeepIOState = SPI_MASTER_KEEP_IO_STATE_DISABLE;
+  hspi2.Init.IOSwap = SPI_IO_SWAP_DISABLE;
+  if (HAL_SPI_Init(&hspi2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN SPI2_Init 2 */
+
+  /* USER CODE END SPI2_Init 2 */
 
 }
 
@@ -561,13 +614,13 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOB, VSYNC_FREQ_Pin|RENDER_TIME_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(VBUS_OTG_FS_GPIO_Port, VBUS_OTG_FS_Pin, GPIO_PIN_SET);
+
+  /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(FRAME_RATE_GPIO_Port, FRAME_RATE_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(MCU_ACTIVE_GPIO_Port, MCU_ACTIVE_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(VBUS_Drive_GPIO_Port, VBUS_Drive_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : VSYNC_FREQ_Pin RENDER_TIME_Pin */
   GPIO_InitStruct.Pin = VSYNC_FREQ_Pin|RENDER_TIME_Pin;
@@ -575,6 +628,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : VBUS_OTG_FS_Pin */
+  GPIO_InitStruct.Pin = VBUS_OTG_FS_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(VBUS_OTG_FS_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : FRAME_RATE_Pin */
   GPIO_InitStruct.Pin = FRAME_RATE_Pin;
@@ -589,13 +649,6 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
   HAL_GPIO_Init(MCU_ACTIVE_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : VBUS_Drive_Pin */
-  GPIO_InitStruct.Pin = VBUS_Drive_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(VBUS_Drive_GPIO_Port, &GPIO_InitStruct);
 
 }
 
@@ -615,6 +668,13 @@ void StartDefaultTask(void *argument)
   /* init code for USB_HOST */
   MX_USB_HOST_Init();
   /* USER CODE BEGIN 5 */
+//  osDelay(20);
+//  debug("Starting MMC initialization...");
+//  osDelay(20);
+//  MX_SDMMC1_MMC_Init();
+//  debug("MMC initialization DONE.");
+  osDelay(1000);
+  formatMMC();
   /* Infinite loop */
   for(;;)
   {
@@ -706,12 +766,12 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
-  debug("ERROR: Error_Handler() called!");
-  return;
+  debug("ERROR: MAIN INITIALIZATION.");
   /* User can add his own implementation to report the HAL error return state */
-  __disable_irq();
+//  __disable_irq();
   while (1)
   {
+    osDelay(1);
   }
   /* USER CODE END Error_Handler_Debug */
 }

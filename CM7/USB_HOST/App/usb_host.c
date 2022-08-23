@@ -25,7 +25,7 @@
 #include "usbh_msc.h"
 
 /* USER CODE BEGIN Includes */
-
+#include "fatfs.h"
 /* USER CODE END Includes */
 
 /* USER CODE BEGIN PV */
@@ -46,6 +46,18 @@ ApplicationTypeDef Appli_state = APPLICATION_IDLE;
  * -- Insert your variables declaration here --
  */
 /* USER CODE BEGIN 0 */
+osThreadId_t fatfsTaskHandle;
+const osThreadAttr_t fatfsTask_attributes = {
+  .name = "fatfsTask",
+  .stack_size = 1024 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
+
+void FATFS_Task(void* argument)
+{
+  testUSB();
+  for (;;) osDelay(1);
+}
 
 /* USER CODE END 0 */
 
@@ -98,22 +110,27 @@ static void USBH_UserProcess  (USBH_HandleTypeDef *phost, uint8_t id)
   switch(id)
   {
   case HOST_USER_SELECT_CONFIGURATION:
-  break;
+    debug("USB: SELECT_CONFIGURATION");
+    break;
 
   case HOST_USER_DISCONNECTION:
-  Appli_state = APPLICATION_DISCONNECT;
-  break;
+    Appli_state = APPLICATION_DISCONNECT;
+    debug("USB: DISCONNECTION");
+    break;
 
   case HOST_USER_CLASS_ACTIVE:
-  Appli_state = APPLICATION_READY;
-  break;
+    Appli_state = APPLICATION_READY;
+    debug("USB: CLASS_ACTIVE");
+    fatfsTaskHandle = osThreadNew(FATFS_Task, NULL, &fatfsTask_attributes);
+    break;
 
   case HOST_USER_CONNECTION:
-  Appli_state = APPLICATION_START;
-  break;
+    Appli_state = APPLICATION_START;
+    debug("USB: CONNECTION");
+    break;
 
   default:
-  break;
+    break;
   }
   /* USER CODE END CALL_BACK_1 */
 }

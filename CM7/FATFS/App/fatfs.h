@@ -28,7 +28,12 @@
 #include "usbh_diskio.h" /* defines USBH_Driver as external */
 
 /* USER CODE BEGIN Includes */
-
+#include "mmc_diskio.h"
+/* eMMC externs */
+ extern uint8_t retMMC; /* Return value for eMMC */
+extern char MMCPath[4]; /* eMMC logical drive path */
+extern FATFS MMCFatFS; /* File system object for eMMC logical drive */
+extern FIL MMCFile; /* File object for eMMC */
 /* USER CODE END Includes */
 
 extern uint8_t retUSBH; /* Return value for USBH */
@@ -39,7 +44,8 @@ extern FIL USBHFile; /* File object for USBH */
 void MX_FATFS_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-
+void formatMMC();
+void testUSB();
 /* USER CODE END Prototypes */
 #ifdef __cplusplus
 }

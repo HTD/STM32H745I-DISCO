@@ -142,6 +142,16 @@
 			<locationURI>PARENT-2-PROJECT_LOC/Drivers/BSP/STM32H745I-DISCO/stm32h745i_discovery_lcd.c</locationURI>
 		</link>
 		<link>
+			<name>Drivers/STM32H745I-DISCO/stm32h745i_discovery_mmc.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/Drivers/BSP/STM32H745I-DISCO/stm32h745i_discovery_mmc.c</locationURI>
+		</link>
+		<link>
+			<name>Drivers/STM32H745I-DISCO/stm32h745i_discovery_mmc.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/Drivers/BSP/STM32H745I-DISCO/stm32h745i_discovery_mmc.h</locationURI>
+		</link>
+		<link>
 			<name>Drivers/STM32H745I-DISCO/stm32h745i_discovery_qspi.c</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/Drivers/BSP/STM32H745I-DISCO/stm32h745i_discovery_qspi.c</locationURI>
@@ -285,6 +295,16 @@
 			<name>Drivers/STM32H7xx_HAL_Driver/stm32h7xx_hal_sdram.c</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_sdram.c</locationURI>
+		</link>
+		<link>
+			<name>Drivers/STM32H7xx_HAL_Driver/stm32h7xx_hal_spi.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_spi.c</locationURI>
+		</link>
+		<link>
+			<name>Drivers/STM32H7xx_HAL_Driver/stm32h7xx_hal_spi_ex.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_spi_ex.c</locationURI>
 		</link>
 		<link>
 			<name>Drivers/STM32H7xx_HAL_Driver/stm32h7xx_hal_tim.c</name>
@@ -550,6 +570,16 @@
 			<name>Application/User/FATFS/Target/ffconf.h</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/CM7/FATFS/Target/ffconf.h</locationURI>
+		</link>
+		<link>
+			<name>Application/User/FATFS/Target/mmc_diskio.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/CM7/FATFS/Target/mmc_diskio.c</locationURI>
+		</link>
+		<link>
+			<name>Application/User/FATFS/Target/mmc_diskio.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/CM7/FATFS/Target/mmc_diskio.h</locationURI>
 		</link>
 		<link>
 			<name>Application/User/FATFS/Target/usbh_diskio.c</name>
