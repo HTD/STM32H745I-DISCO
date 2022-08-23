@@ -192,6 +192,7 @@ Error_Handler();
   /* USER CODE BEGIN 2 */
 
   if (!debugMessageChanged) debug("Main initialization completed.");
+
   /* USER CODE END 2 */
 
   /* Init scheduler */
@@ -668,12 +669,6 @@ void StartDefaultTask(void *argument)
   /* init code for USB_HOST */
   MX_USB_HOST_Init();
   /* USER CODE BEGIN 5 */
-//  osDelay(20);
-//  debug("Starting MMC initialization...");
-//  osDelay(20);
-//  MX_SDMMC1_MMC_Init();
-//  debug("MMC initialization DONE.");
-  osDelay(1000);
   formatMMC();
   /* Infinite loop */
   for(;;)

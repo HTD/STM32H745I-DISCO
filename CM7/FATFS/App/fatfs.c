@@ -62,9 +62,9 @@ DWORD get_fattime(void)
 void formatMMC()
 {
   debug("Formatting MMC...");
-  osDelay(20);
-  static TCHAR workBuffer[_MIN_SS];
-  FRESULT fr = f_mkfs(MMCPath, FM_ANY, 0, workBuffer, sizeof(workBuffer));
+  osDelay(16);
+  static TCHAR workBuffer[_MAX_SS];
+  FRESULT fr = f_mkfs(MMCPath, FM_EXFAT, 0, workBuffer, sizeof(workBuffer));
   if (fr == FR_OK)
     debug("eMMC formatted successfully.");
   else
@@ -75,7 +75,7 @@ void testUSB()
 {
 //  osDelay(1000);
   debug("Mounting USB disk...");
-  osDelay(20);
+  osDelay(16);
   FRESULT fr = f_mount(&USBHFatFS, USBHPath, 0x1);
   if (fr == FR_OK)
     debug("USB mounted successfully.");
