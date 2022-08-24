@@ -669,12 +669,8 @@ void StartDefaultTask(void *argument)
   /* init code for USB_HOST */
   MX_USB_HOST_Init();
   /* USER CODE BEGIN 5 */
-  formatMMC();
   /* Infinite loop */
-  for(;;)
-  {
-    osDelay(1);
-  }
+  for(;;) osDelay(1);
   /* USER CODE END 5 */
 }
 
@@ -689,10 +685,7 @@ __weak void TouchGFX_Task(void *argument)
 {
   /* USER CODE BEGIN TouchGFX_Task */
   /* Infinite loop */
-  for(;;)
-  {
-    osDelay(1);
-  }
+  for(;;) osDelay(1);
   /* USER CODE END TouchGFX_Task */
 }
 

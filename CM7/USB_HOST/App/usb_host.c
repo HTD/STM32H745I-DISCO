@@ -46,16 +46,103 @@ ApplicationTypeDef Appli_state = APPLICATION_IDLE;
  * -- Insert your variables declaration here --
  */
 /* USER CODE BEGIN 0 */
-osThreadId_t fatfsTaskHandle;
-const osThreadAttr_t fatfsTask_attributes = {
-  .name = "fatfsTask",
+
+static osThreadId_t usbhApplicationTaskHandle;
+static const osThreadAttr_t usbhApplication_attributes = {
+  .name = "USB Host Application",
   .stack_size = 1024 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
 
-void FATFS_Task(void* argument)
+/**
+ * @fn void USBH_Test()
+ * @brief Tests the USB disk support.
+ */
+static void USBH_Test()
 {
-  testUSB();
+  debug("Mounting USB disk...");
+  osDelay(16);
+  FRESULT fr = f_mount(&USBHFatFS, USBHPath, 0x1);
+  if (fr == FR_OK)
+    debug("USB mounted successfully.");
+  else
+    debug("ERROR: USB f_mount().");
+  osDelay(16);
+  const TCHAR* fileName = "STM32H745I-DISCO-TEST.txt";
+  const TCHAR* content = "It seems like the USB communication works just fine.";
+  TCHAR buffer[128];
+  const UINT contentLength = strlen(content);
+  uint8_t error = 0;
+  UINT bytesRead = 0, bytesWritten = 0;
+  fr = f_open(&USBHFile, fileName, FA_WRITE | FA_CREATE_ALWAYS);
+  if (fr == FR_OK)
+  {
+    debug("File created successfully.");
+    osDelay(16);
+    fr = f_write(&USBHFile, content, contentLength, &bytesWritten);
+    if (fr == FR_OK)
+    {
+      debug("File content written.");
+      osDelay(16);
+      fr = f_close(&USBHFile);
+      if (fr == FR_OK)
+      {
+        fr = f_open(&USBHFile, fileName, FA_READ);
+        if (fr == FR_OK)
+        {
+          debug("File opnened successfully.");
+          osDelay(16);
+          fr = f_read(&USBHFile, buffer, contentLength, &bytesRead);
+          if (fr == FR_OK)
+          {
+            if (bytesRead == bytesWritten)
+            {
+              for (uint8_t i = 0; i < contentLength; i++)
+                if (buffer[i] != content[i])
+                {
+                  error = 1;
+                  break;
+                }
+              if (error)
+                debug("File contents differ!");
+              else
+                debug("Test file content matches.");
+            }
+            else
+              debug("File size mismatch!");
+            osDelay(16);
+            fr = f_close(&USBHFile);
+            if (fr == FR_OK)
+              debug("USB host test SUCCESS!");
+            else
+              debug("Could not close the file read.");
+            osDelay(16);
+          }
+          else
+            debug("Could not read the file.");
+        }
+        else
+          debug("Could not open the file.");
+      }
+      else
+        debug("Could not close the file written.");
+    }
+    else
+      debug("Could not write data.");
+  }
+  else
+    debug("Could not create the file.");
+  osDelay(16);
+}
+
+/**
+ * @fn void USBH_Application(void*)
+ * @brief The application run as the separate OS thread when the USB disk is connected.
+ * @param argument
+ */
+void USBH_Application(USBH_HandleTypeDef *phost)
+{
+  USBH_Test(); // TODO: Provide proper USB disk initialization.
   for (;;) osDelay(1);
 }
 
@@ -116,12 +203,13 @@ static void USBH_UserProcess  (USBH_HandleTypeDef *phost, uint8_t id)
   case HOST_USER_DISCONNECTION:
     Appli_state = APPLICATION_DISCONNECT;
     debug("USB: DISCONNECTION");
+    osThreadTerminate(usbhApplicationTaskHandle);
     break;
 
   case HOST_USER_CLASS_ACTIVE:
     Appli_state = APPLICATION_READY;
     debug("USB: CLASS_ACTIVE");
-    fatfsTaskHandle = osThreadNew(FATFS_Task, NULL, &fatfsTask_attributes);
+    usbhApplicationTaskHandle = osThreadNew((osThreadFunc_t)USBH_Application, phost, &usbhApplication_attributes);
     break;
 
   case HOST_USER_CONNECTION:

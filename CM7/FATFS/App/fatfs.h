@@ -44,8 +44,7 @@ extern FIL USBHFile; /* File object for USBH */
 void MX_FATFS_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-void formatMMC();
-void testUSB();
+void MMCFormat();
 /* USER CODE END Prototypes */
 #ifdef __cplusplus
 }

@@ -147,11 +147,6 @@
 			<locationURI>PARENT-2-PROJECT_LOC/Drivers/BSP/STM32H745I-DISCO/stm32h745i_discovery_mmc.c</locationURI>
 		</link>
 		<link>
-			<name>Drivers/STM32H745I-DISCO/stm32h745i_discovery_mmc.h</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/Drivers/BSP/STM32H745I-DISCO/stm32h745i_discovery_mmc.h</locationURI>
-		</link>
-		<link>
 			<name>Drivers/STM32H745I-DISCO/stm32h745i_discovery_qspi.c</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/Drivers/BSP/STM32H745I-DISCO/stm32h745i_discovery_qspi.c</locationURI>

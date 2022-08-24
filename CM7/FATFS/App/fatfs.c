@@ -59,7 +59,7 @@ DWORD get_fattime(void)
 
 /* USER CODE BEGIN Application */
 
-void formatMMC()
+void MMCFormat()
 {
   debug("Formatting MMC...");
   osDelay(16);
@@ -71,16 +71,6 @@ void formatMMC()
     debug("ERROR: eMMC f_mkfs().");
 }
 
-void testUSB()
-{
-//  osDelay(1000);
-  debug("Mounting USB disk...");
-  osDelay(16);
-  FRESULT fr = f_mount(&USBHFatFS, USBHPath, 0x1);
-  if (fr == FR_OK)
-    debug("USB mounted successfully.");
-  else
-    debug("ERROR: USB f_mount().");
-}
+
 
 /* USER CODE END Application */
