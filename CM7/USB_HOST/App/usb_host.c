@@ -50,7 +50,7 @@ ApplicationTypeDef Appli_state = APPLICATION_IDLE;
 static osThreadId_t usbhApplicationTaskHandle;
 static const osThreadAttr_t usbhApplication_attributes = {
   .name = "USB Host Application",
-  .stack_size = 1024 * 4,
+  .stack_size = 512 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
 
