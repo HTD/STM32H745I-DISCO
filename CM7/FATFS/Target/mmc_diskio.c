@@ -167,7 +167,7 @@ DRESULT MMC_read(BYTE lun, BYTE *buff, DWORD sector, UINT count)
   }
 
 
-  if(BSP_MMC_ReadBlocks_DMA(0, (uint32_t*)buff,
+  if(BSP_MMC_ReadBlocks(0, (uint32_t*)buff,
                         (uint32_t) (sector),
                         count) == BSP_ERROR_NONE)
   {
@@ -216,7 +216,7 @@ DRESULT MMC_write(BYTE lun, const BYTE *buff, DWORD sector, UINT count)
   while (HAL_HSEM_FastTake(EMMC_HSEM_ID) != HAL_OK)
   {
   }
-  if(BSP_MMC_WriteBlocks_DMA(0, (uint32_t*)buff,
+  if(BSP_MMC_WriteBlocks(0, (uint32_t*)buff,
                             (uint32_t)(sector),
                             count) == BSP_ERROR_NONE)
   {
@@ -226,6 +226,10 @@ DRESULT MMC_write(BYTE lun, const BYTE *buff, DWORD sector, UINT count)
     res = RES_OK;
   }
   HAL_HSEM_Release(EMMC_HSEM_ID, 0);
+  if (res != 0)
+  {
+    debug("fuck");
+  }
   return res;
 }
 #endif /* _USE_WRITE == 1 */
