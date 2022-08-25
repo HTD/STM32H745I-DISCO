@@ -19,8 +19,8 @@ static TestGPIOPin_TypeDef pins[10] =
     (TestGPIOPin_TypeDef){ D10_GPIO_Port, D10_Pin, 10, GPIO_PIN_RESET },
     (TestGPIOPin_TypeDef){ D11_GPIO_Port, D11_Pin, 11, GPIO_PIN_RESET },
     (TestGPIOPin_TypeDef){ D12_GPIO_Port, D12_Pin, 12, GPIO_PIN_RESET },
-    (TestGPIOPin_TypeDef){ D14_GPIO_Port, D14_Pin, 14, GPIO_PIN_RESET },
-    (TestGPIOPin_TypeDef){ D15_GPIO_Port, D15_Pin, 15, GPIO_PIN_RESET }
+    (TestGPIOPin_TypeDef){ A0_GPIO_Port, A0_Pin, 0, GPIO_PIN_RESET },
+    (TestGPIOPin_TypeDef){ A1_GPIO_Port, A1_Pin, 1, GPIO_PIN_RESET }
 };
 
 static void write_all_ARD_pins(GPIO_PinState pin_state)

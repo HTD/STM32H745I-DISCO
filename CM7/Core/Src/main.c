@@ -919,6 +919,12 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(D04_GPIO_Port, D04_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(A1_GPIO_Port, A1_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(A0_GPIO_Port, A0_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOD, D15_Pin|D14_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : D10_Pin D11_Pin */
@@ -970,6 +976,20 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(D04_GPIO_Port, &GPIO_InitStruct);
 
+  /*Configure GPIO pin : A1_Pin */
+  GPIO_InitStruct.Pin = A1_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(A1_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : A0_Pin */
+  GPIO_InitStruct.Pin = A0_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(A0_GPIO_Port, &GPIO_InitStruct);
+
   /*Configure GPIO pins : D15_Pin D14_Pin */
   GPIO_InitStruct.Pin = D15_Pin|D14_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
@@ -995,7 +1015,7 @@ void StartDefaultTask(void *argument)
   /* init code for USB_HOST */
   MX_USB_HOST_Init();
   /* USER CODE BEGIN 5 */
-  PWM_Test();
+  GPIO_Out_Test();
   /* Infinite loop */
   for(;;) osDelay(1);
   /* USER CODE END 5 */
