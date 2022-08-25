@@ -33,7 +33,7 @@ protected:
     /*
      * Wildcard Buffers
      */
-    static const uint16_t CONSOLE_SIZE = 400;
+    static const uint16_t CONSOLE_SIZE = 410;
     touchgfx::Unicode::UnicodeChar consoleBuffer[CONSOLE_SIZE];
 
 private:

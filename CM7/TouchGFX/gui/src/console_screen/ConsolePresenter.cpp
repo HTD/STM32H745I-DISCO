@@ -18,10 +18,9 @@ void ConsolePresenter::deactivate()
 }
 
 /**
- * @brief Adds a message to the console. When maximum number lines displayed, the console will be clear.
- * @param msg A message to add.
+ * @brief Updates the console view.
  */
-void ConsolePresenter::addMsg(const char* msg)
+void ConsolePresenter::updateConsole()
 {
-    view.addMsg(msg);
+    view.update();
 }

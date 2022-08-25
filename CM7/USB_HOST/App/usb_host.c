@@ -61,13 +61,11 @@ static const osThreadAttr_t usbhApplication_attributes = {
 static void USBH_Test()
 {
   debug("Mounting USB disk...");
-  osDelay(16);
   FRESULT fr = f_mount(&USBHFatFS, USBHPath, 0x1);
   if (fr == FR_OK)
     debug("USB mounted successfully.");
   else
     debug("ERROR: USB f_mount().");
-  osDelay(16);
   const TCHAR* fileName = "STM32H745I-DISCO-TEST.txt";
   const TCHAR* content = "It seems like the USB communication works just fine.";
   TCHAR buffer[128];
@@ -78,12 +76,10 @@ static void USBH_Test()
   if (fr == FR_OK)
   {
     debug("File created successfully.");
-    osDelay(16);
     fr = f_write(&USBHFile, content, contentLength, &bytesWritten);
     if (fr == FR_OK)
     {
       debug("File content written.");
-      osDelay(16);
       fr = f_close(&USBHFile);
       if (fr == FR_OK)
       {
@@ -91,7 +87,6 @@ static void USBH_Test()
         if (fr == FR_OK)
         {
           debug("File opnened successfully.");
-          osDelay(16);
           fr = f_read(&USBHFile, buffer, contentLength, &bytesRead);
           if (fr == FR_OK)
           {
@@ -110,13 +105,11 @@ static void USBH_Test()
             }
             else
               debug("File size mismatch!");
-            osDelay(16);
             fr = f_close(&USBHFile);
             if (fr == FR_OK)
               debug("USB host test SUCCESS!");
             else
               debug("Could not close the file read.");
-            osDelay(16);
           }
           else
             debug("Could not read the file.");
@@ -132,7 +125,6 @@ static void USBH_Test()
   }
   else
     debug("Could not create the file.");
-  osDelay(16);
 }
 
 /**

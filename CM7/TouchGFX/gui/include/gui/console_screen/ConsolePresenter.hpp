@@ -25,7 +25,7 @@ public:
      */
     virtual void deactivate();
 
-    void addMsg(const char* msg);
+    void updateConsole();
 
     virtual ~ConsolePresenter() {};
 

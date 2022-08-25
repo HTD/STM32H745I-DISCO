@@ -10,7 +10,7 @@ public:
     
     virtual ~ModelListener() {}
 
-    virtual void addMsg(const char* msg) {}
+    virtual void updateConsole() {}
 
     void bind(Model* m)
     {

@@ -90,7 +90,6 @@ static void MX_FMC_Init(void);
 static void MX_LTDC_Init(void);
 static void MX_CRC_Init(void);
 static void MX_DMA2D_Init(void);
-static void MX_SDMMC1_MMC_Init(void);
 static void MX_SPI2_Init(void);
 void StartDefaultTask(void *argument);
 void TouchGFX_Task(void *argument);
@@ -101,18 +100,6 @@ void TouchGFX_Task(void *argument);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-char* debugMessage;
-uint8_t debugMessageChanged;
-/**
- * @brief Adds a simple debug message to the console.
- * @remarks The message will be added in the next GUI frame. Only the last message on the next frame start will be added.
- * @param msg The message to add. UTF-8 text.
- */
-void debug(char* msg)
-{
-    debugMessage = msg;
-    debugMessageChanged = 1;
-}
 /* USER CODE END 0 */
 
 /**
@@ -122,7 +109,7 @@ void debug(char* msg)
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
+  console_clear();
   /* USER CODE END 1 */
 /* USER CODE BEGIN Boot_Mode_Sequence_0 */
   int32_t timeout;
@@ -184,14 +171,13 @@ Error_Handler();
   MX_CRC_Init();
   MX_DMA2D_Init();
   MX_FATFS_Init();
-  MX_SDMMC1_MMC_Init();
   MX_SPI2_Init();
   MX_TouchGFX_Init();
   /* Call PreOsInit function */
   MX_TouchGFX_PreOSInit();
   /* USER CODE BEGIN 2 */
 
-  if (!debugMessageChanged) debug("Main initialization completed.");
+  debug("Main initialization completed.");
 
   /* USER CODE END 2 */
 
@@ -468,7 +454,7 @@ static void MX_QUADSPI_Init(void)
   * @param None
   * @retval None
   */
-static void MX_SDMMC1_MMC_Init(void)
+void MX_SDMMC1_MMC_Init(void)
 {
 
   /* USER CODE BEGIN SDMMC1_Init 0 */
@@ -756,11 +742,7 @@ void Error_Handler(void)
   /* USER CODE BEGIN Error_Handler_Debug */
   debug("ERROR: MAIN INITIALIZATION.");
   /* User can add his own implementation to report the HAL error return state */
-//  __disable_irq();
-  while (1)
-  {
-    osDelay(1);
-  }
+  while (1) osDelay(1);
   /* USER CODE END Error_Handler_Debug */
 }
 

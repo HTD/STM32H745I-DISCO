@@ -56,7 +56,6 @@ extern uint8_t debugMessageChanged;
 void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
-void debug(char* msg);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
@@ -70,6 +69,7 @@ void debug(char* msg);
 #define FRAME_RATE_GPIO_Port GPIOG
 #define MCU_ACTIVE_Pin GPIO_PIN_6
 #define MCU_ACTIVE_GPIO_Port GPIOA
+void   MX_SDMMC1_MMC_Init(void);
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */

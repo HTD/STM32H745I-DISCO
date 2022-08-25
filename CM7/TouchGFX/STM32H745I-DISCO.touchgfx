@@ -32,7 +32,7 @@
             "Wildcard1": {
               "TextId": "__SingleUse_VKXT",
               "UseBuffer": true,
-              "BufferSize": 400
+              "BufferSize": 410
             }
           }
         ],
@@ -88,7 +88,7 @@
     "DisplayOrientation": "Landscape",
     "Family": "STM32H7",
     "Platform": "m7",
-    "ProjectFile": "../../STM32H745I_DISCO.ioc",
+    "ProjectFile": "../../stm32h745i_disco.ioc",
     "OptionalComponentsRoot": "../Middlewares/ST/touchgfx_components",
     "OptionalComponents": []
   },
