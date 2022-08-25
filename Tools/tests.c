@@ -70,6 +70,9 @@ void GPIO_In_Test()
 void PWM_Test()
 {
   console_write("100kHz PWM on D3, D5 and D6...");
+  htim1.Instance->CCR1 = (htim1.Instance->ARR + 1) / 2 - 1;
+  htim3.Instance->CCR1 = (htim3.Instance->ARR + 1) / 2 - 1;
+  htim15.Instance->CCR2 = (htim15.Instance->ARR + 1) / 2 - 1;
   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
   HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
   HAL_TIM_PWM_Start(&htim15, TIM_CHANNEL_2);
