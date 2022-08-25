@@ -11,6 +11,20 @@
 #include "main.h"
 
 extern UART_HandleTypeDef huart1;
+extern TIM_HandleTypeDef htim1;
+extern TIM_HandleTypeDef htim3;
+extern TIM_HandleTypeDef htim15;
 
-void printTest(const char* message);
-void USBDiskTest();
+typedef struct
+{
+  GPIO_TypeDef* port;
+  uint16_t pin;
+  uint8_t ARD;
+  GPIO_PinState state;
+} TestGPIOPin_TypeDef;
+
+void PWM_Test();
+void GPIO_Out_Test();
+void GPIO_In_Test();
+void UART_Test(const char* message);
+void USB_Disk_Test();

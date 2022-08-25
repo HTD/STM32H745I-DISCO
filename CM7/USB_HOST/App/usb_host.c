@@ -62,7 +62,7 @@ static const osThreadAttr_t usbhApplication_attributes = {
  */
 void USBH_Application(USBH_HandleTypeDef *phost)
 {
-  USBDiskTest(); // TODO: Provide proper USB disk initialization.
+  USB_Disk_Test(); // TODO: Provide proper USB disk initialization.
   for (;;) osDelay(1);
 }
 

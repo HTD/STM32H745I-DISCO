@@ -9,7 +9,73 @@
 #include "tests.h"
 #include "fatfs.h"
 
-void printTest(const char* message)
+static TestGPIOPin_TypeDef pins[10] =
+{
+    (TestGPIOPin_TypeDef){ D02_GPIO_Port, D02_Pin, 2, GPIO_PIN_RESET },
+    (TestGPIOPin_TypeDef){ D04_GPIO_Port, D04_Pin, 4, GPIO_PIN_RESET },
+    (TestGPIOPin_TypeDef){ D07_GPIO_Port, D07_Pin, 7, GPIO_PIN_RESET },
+    (TestGPIOPin_TypeDef){ D08_GPIO_Port, D08_Pin, 8, GPIO_PIN_RESET },
+    (TestGPIOPin_TypeDef){ D09_GPIO_Port, D09_Pin, 9, GPIO_PIN_RESET },
+    (TestGPIOPin_TypeDef){ D10_GPIO_Port, D10_Pin, 10, GPIO_PIN_RESET },
+    (TestGPIOPin_TypeDef){ D11_GPIO_Port, D11_Pin, 11, GPIO_PIN_RESET },
+    (TestGPIOPin_TypeDef){ D12_GPIO_Port, D12_Pin, 12, GPIO_PIN_RESET },
+    (TestGPIOPin_TypeDef){ D14_GPIO_Port, D14_Pin, 14, GPIO_PIN_RESET },
+    (TestGPIOPin_TypeDef){ D15_GPIO_Port, D15_Pin, 15, GPIO_PIN_RESET }
+};
+
+static void write_all_ARD_pins(GPIO_PinState pin_state)
+{
+  for (int i = 0; i < 10; i++)
+    HAL_GPIO_WritePin(pins[i].port, pins[i].pin, pin_state);
+}
+
+void GPIO_Out_Test()
+{
+  debug("GPIO OUT test in progress...");
+  for (;;)
+  {
+    write_all_ARD_pins(GPIO_PIN_SET);
+    osDelay(1);
+    write_all_ARD_pins(GPIO_PIN_RESET);
+    osDelay(1);
+  }
+}
+
+void GPIO_In_Test()
+{
+  debug("GPIO IN test in progress...");
+  for (;;)
+  {
+    for (int i = 0; i < 10; i++)
+    {
+      GPIO_PinState lastState = pins[i].state;
+      GPIO_PinState currentState = HAL_GPIO_ReadPin(pins[i].port, pins[i].pin);
+      if (currentState != lastState)
+      {
+        if (currentState == GPIO_PIN_SET)
+          debug_i("PIN D%i is SET.", pins[i].ARD);
+        else
+          debug_i("PIN D%i is RESET.", pins[i].ARD);
+      }
+      pins[i].state = currentState;
+    }
+    osDelay(1);
+  }
+}
+
+/**
+ * @fn void PWMTest()
+ * @brief Tests the 3 PWM generators and 10 I/O pins.
+ */
+void PWM_Test()
+{
+  console_write("100kHz PWM on D3, D5 and D6...");
+  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+  HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
+  HAL_TIM_PWM_Start(&htim15, TIM_CHANNEL_2);
+}
+
+void UART_Test(const char* message)
 {
   console_write("Printing...");
   HAL_UART_Transmit_DMA(&huart1, (uint8_t*)message, strlen(message));
@@ -17,10 +83,10 @@ void printTest(const char* message)
 }
 
 /**
- * @fn void USBH_Test()
+ * @fn void USBDiskTest()
  * @brief Tests the USB disk support.
  */
-void USBDiskTest()
+void USB_Disk_Test()
 {
   debug("Mounting USB disk...");
   FRESULT fr = f_mount(&USBHFatFS, USBHPath, 0x1);

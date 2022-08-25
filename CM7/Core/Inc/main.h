@@ -53,6 +53,8 @@ extern uint8_t debugMessageChanged;
 
 /* USER CODE END EM */
 
+void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
+
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);
 
@@ -60,12 +62,34 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define D10_Pin GPIO_PIN_4
+#define D10_GPIO_Port GPIOB
+#define D12_Pin GPIO_PIN_2
+#define D12_GPIO_Port GPIOI
+#define D09_Pin GPIO_PIN_15
+#define D09_GPIO_Port GPIOH
+#define D08_Pin GPIO_PIN_3
+#define D08_GPIO_Port GPIOE
 #define VBUS_OTG_FS_Pin GPIO_PIN_9
 #define VBUS_OTG_FS_GPIO_Port GPIOA
-#define FRAME_RATE_Pin GPIO_PIN_3
-#define FRAME_RATE_GPIO_Port GPIOG
-#define MCU_ACTIVE_Pin GPIO_PIN_6
-#define MCU_ACTIVE_GPIO_Port GPIOA
+#define D07_Pin GPIO_PIN_8
+#define D07_GPIO_Port GPIOI
+#define D06_Pin GPIO_PIN_6
+#define D06_GPIO_Port GPIOE
+#define D05_Pin GPIO_PIN_8
+#define D05_GPIO_Port GPIOA
+#define D02_Pin GPIO_PIN_3
+#define D02_GPIO_Port GPIOG
+#define D04_Pin GPIO_PIN_1
+#define D04_GPIO_Port GPIOK
+#define D03_Pin GPIO_PIN_6
+#define D03_GPIO_Port GPIOA
+#define D15_Pin GPIO_PIN_12
+#define D15_GPIO_Port GPIOD
+#define D14_Pin GPIO_PIN_13
+#define D14_GPIO_Port GPIOD
+#define D11_Pin GPIO_PIN_15
+#define D11_GPIO_Port GPIOB
 void   MX_SDMMC1_MMC_Init(void);
 /* USER CODE BEGIN Private defines */
 
