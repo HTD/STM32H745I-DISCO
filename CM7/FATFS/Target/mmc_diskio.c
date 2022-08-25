@@ -19,6 +19,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "ff_gen_drv.h"
 #include "mmc_diskio.h"
+#include "console.h"
 #include <stdio.h>
 
 
@@ -228,7 +229,7 @@ DRESULT MMC_write(BYTE lun, const BYTE *buff, DWORD sector, UINT count)
   HAL_HSEM_Release(EMMC_HSEM_ID, 0);
   if (res != 0)
   {
-    debug("fuck");
+    debug("ERROR: MMC_write().");
   }
   return res;
 }
