@@ -9,31 +9,69 @@
 #include "tests.h"
 #include "fatfs.h"
 
+/**
+ * @brief Pins defined in hardware configuration as GPIO.
+ */
 static TestGPIOPin_TypeDef pins[10] =
 {
-    (TestGPIOPin_TypeDef){ D02_GPIO_Port, D02_Pin, 2, GPIO_PIN_RESET },
-    (TestGPIOPin_TypeDef){ D04_GPIO_Port, D04_Pin, 4, GPIO_PIN_RESET },
-    (TestGPIOPin_TypeDef){ D07_GPIO_Port, D07_Pin, 7, GPIO_PIN_RESET },
-    (TestGPIOPin_TypeDef){ D08_GPIO_Port, D08_Pin, 8, GPIO_PIN_RESET },
-    (TestGPIOPin_TypeDef){ D09_GPIO_Port, D09_Pin, 9, GPIO_PIN_RESET },
-    (TestGPIOPin_TypeDef){ D10_GPIO_Port, D10_Pin, 10, GPIO_PIN_RESET },
-    (TestGPIOPin_TypeDef){ D11_GPIO_Port, D11_Pin, 11, GPIO_PIN_RESET },
-    (TestGPIOPin_TypeDef){ D12_GPIO_Port, D12_Pin, 12, GPIO_PIN_RESET },
-    (TestGPIOPin_TypeDef){ A0_GPIO_Port, A0_Pin, 0, GPIO_PIN_RESET },
-    (TestGPIOPin_TypeDef){ A1_GPIO_Port, A1_Pin, 1, GPIO_PIN_RESET }
+    (TestGPIOPin_TypeDef){ D02_GPIO_Port, D02_Pin, "D2", GPIO_PIN_RESET },
+    (TestGPIOPin_TypeDef){ D04_GPIO_Port, D04_Pin, "D4", GPIO_PIN_RESET },
+    (TestGPIOPin_TypeDef){ D07_GPIO_Port, D07_Pin, "D7", GPIO_PIN_RESET },
+    (TestGPIOPin_TypeDef){ D08_GPIO_Port, D08_Pin, "D8", GPIO_PIN_RESET },
+    (TestGPIOPin_TypeDef){ D09_GPIO_Port, D09_Pin, "D9", GPIO_PIN_RESET },
+    (TestGPIOPin_TypeDef){ D10_GPIO_Port, D10_Pin, "D10", GPIO_PIN_RESET },
+    (TestGPIOPin_TypeDef){ D11_GPIO_Port, D11_Pin, "D11", GPIO_PIN_RESET },
+    (TestGPIOPin_TypeDef){ D12_GPIO_Port, D12_Pin, "D12", GPIO_PIN_RESET },
+    (TestGPIOPin_TypeDef){ A0_GPIO_Port, A0_Pin, "A0", GPIO_PIN_RESET },
+    (TestGPIOPin_TypeDef){ A1_GPIO_Port, A1_Pin, "A1", GPIO_PIN_RESET }
 };
 
+/**
+ * @fn void write_all_ARD_pins(GPIO_PinState)
+ * @brief Writes specified state to all GPIO pins configured as outputs.
+ * @param pin_state Pin state to set.
+ */
 static void write_all_ARD_pins(GPIO_PinState pin_state)
 {
   for (int i = 0; i < 10; i++)
-    HAL_GPIO_WritePin(pins[i].port, pins[i].pin, pin_state);
+  {
+    if (pins[i].port->MODER & pins[i].pin) // the pin is output
+      HAL_GPIO_WritePin(pins[i].port, pins[i].pin, pin_state);
+  }
 }
 
-void GPIO_Out_Test()
+/**
+ * @fn void scan_inputs()
+ * @brief Scans all GPIO pins configured as inputs and outputs changes in states to the console.
+ */
+static void scan_inputs()
 {
-  debug("GPIO OUT test in progress...");
+  for (int i = 0; i < 10; i++)
+  {
+    if (pins[i].port->MODER & pins[i].pin) continue; // ignore outputs
+    GPIO_PinState lastState = pins[i].state;
+    GPIO_PinState currentState = HAL_GPIO_ReadPin(pins[i].port, pins[i].pin);
+    if (currentState != lastState)
+    {
+      if (currentState == GPIO_PIN_SET)
+        debug_s("PIN %s is SET.", pins[i].ARD);
+      else
+        debug_s("PIN %s is RESET.", pins[i].ARD);
+    }
+    pins[i].state = currentState;
+  }
+}
+
+/**
+ * @fn void GPIO_Test()
+ * @brief Tests GPIO by setting 500Hz pulse to all GPIO outputs, and reporting change of state of all GPIO inputs.
+ */
+void GPIO_Test()
+{
+  debug("GPIO test in progress...");
   for (;;)
   {
+    scan_inputs();
     write_all_ARD_pins(GPIO_PIN_SET);
     osDelay(1);
     write_all_ARD_pins(GPIO_PIN_RESET);
@@ -41,31 +79,9 @@ void GPIO_Out_Test()
   }
 }
 
-void GPIO_In_Test()
-{
-  debug("GPIO IN test in progress...");
-  for (;;)
-  {
-    for (int i = 0; i < 10; i++)
-    {
-      GPIO_PinState lastState = pins[i].state;
-      GPIO_PinState currentState = HAL_GPIO_ReadPin(pins[i].port, pins[i].pin);
-      if (currentState != lastState)
-      {
-        if (currentState == GPIO_PIN_SET)
-          debug_i("PIN D%i is SET.", pins[i].ARD);
-        else
-          debug_i("PIN D%i is RESET.", pins[i].ARD);
-      }
-      pins[i].state = currentState;
-    }
-    osDelay(1);
-  }
-}
-
 /**
  * @fn void PWMTest()
- * @brief Tests the 3 PWM generators and 10 I/O pins.
+ * @brief Tests the 3 PWM generators by applying 100kHz 50% PWM to the channel outputs.
  */
 void PWM_Test()
 {
@@ -78,16 +94,22 @@ void PWM_Test()
   HAL_TIM_PWM_Start(&htim15, TIM_CHANNEL_2);
 }
 
+/**
+ * @fn void UART_Test(const char*)
+ * @brief Tests the UART by sending a message to the UART port.
+ * @param message Message to send.
+ */
 void UART_Test(const char* message)
 {
-  console_write("Printing...");
+  console_write("UART TX...");
   HAL_UART_Transmit_DMA(&huart1, (uint8_t*)message, strlen(message));
   console_writeln("OK.");
 }
 
 /**
  * @fn void USBDiskTest()
- * @brief Tests the USB disk support.
+ * @brief Tests the USB disk support by mounting, writing and reading a test file.
+ * @remarks Call from USBH_Application(), it's called whenever USB disk is connected and detected as MSC device.
  */
 void USB_Disk_Test()
 {
