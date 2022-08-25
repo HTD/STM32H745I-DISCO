@@ -33,6 +33,7 @@ extern "C" {
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "console.h"
+#include "tests.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -59,10 +60,6 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define VSYNC_FREQ_Pin GPIO_PIN_6
-#define VSYNC_FREQ_GPIO_Port GPIOB
-#define RENDER_TIME_Pin GPIO_PIN_7
-#define RENDER_TIME_GPIO_Port GPIOB
 #define VBUS_OTG_FS_Pin GPIO_PIN_9
 #define VBUS_OTG_FS_GPIO_Port GPIOA
 #define FRAME_RATE_Pin GPIO_PIN_3

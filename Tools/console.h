@@ -1,5 +1,5 @@
 /**
- * @file      console.c
+ * @file      console.h
  * @author    CodeDog
  * @brief     Simple text / debug console for TouchGFX projects, header file.
  * @copyright (c)2022 CodeDog, All rights reserved.
