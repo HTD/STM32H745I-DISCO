@@ -135,3 +135,16 @@ void debug_s(const char* format, const char* s)
   snprintf((char*)line, CONSOLE_WIDTH, format, s);
   console_writeln((char*)line);
 }
+
+/**
+ * @fn void debug_s(const char*, char*)
+ * @brief Outputs a debug message with a string value, without going to the new line.
+ * @param format sprintf type format.
+ * @param i Null terminated UTF-8 string to pass.
+ */
+void debug_s_(const char* format, const char* s)
+{
+  uint8_t line[40];
+  snprintf((char*)line, CONSOLE_WIDTH, format, s);
+  console_write((char*)line);
+}

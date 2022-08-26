@@ -31,6 +31,7 @@ void debug(const char* s);
 void debug_i(const char* format, int i);
 void debug_f(const char* format, float f);
 void debug_s(const char* format, const char* s);
+void debug_s_(const char* format, const char* s);
 
 #ifdef __cplusplus
 }
