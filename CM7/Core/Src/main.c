@@ -1041,7 +1041,6 @@ void StartDefaultTask(void *argument)
   /* init code for USB_HOST */
   MX_USB_HOST_Init();
   /* USER CODE BEGIN 5 */
-  GPIO_Test();
   /* Infinite loop */
   for(;;) osDelay(1);
   /* USER CODE END 5 */
