@@ -25,7 +25,7 @@ extern TIM_HandleTypeDef htim15;
 typedef struct
 {
   GPIO_TypeDef* port; ///< GPIO port pointer.
-  uint16_t pin; ///< GPIO pin bit mask.
+  uint16_t bit; ///< GPIO pin bit mask.
   char* ARD; ///< ARDUINO pin name.
   GPIO_PinState state; ///< Pin state storage.
 } TestGPIOPin_TypeDef;

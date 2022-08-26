@@ -27,6 +27,53 @@ static TestGPIOPin_TypeDef pins[10] =
 };
 
 /**
+ * @fn uint32_t get_32_bit_mask(uint16_t)
+ * @brief Gets the 32-bit mask form the 16-bit pin mask for 32-bit GPIO registers.
+ * @param m16 16-bit pin mask.
+ * @return 32-bit pin mask.
+ */
+static uint32_t get_32_bit_mask(uint16_t m16)
+{
+  uint32_t m32 = 0;
+  for (uint32_t i = 0; i < 16; i++)
+  {
+    if ((m16 >> i) & 1)
+    {
+      m32 |= 1 << (i << 1);
+      m32 |= 1 << ((i << 1) + 1);
+    }
+  }
+  return m32;
+}
+
+/**
+ * @fn uint8_t get_pin_mode(int)
+ * @brief Gets the mode register bits for the pin.
+ * @param pinIndex Configured pins index.
+ * @return Pin mode register bits.
+ */
+static uint8_t get_pin_mode(int pinIndex)
+{
+  GPIO_TypeDef* gpio = pins[pinIndex].port;
+  uint16_t m16 = pins[pinIndex].bit;
+  uint8_t pos;
+  for (pos = 0; pos < 16; pos++) if ((m16 >> pos) == 1) break;
+  uint32_t m32 = get_32_bit_mask(m16);
+  return (gpio->MODER & m32) >> (pos << 1);
+}
+
+/**
+ * @fn uint8_t is_output(int)
+ * @brief Returns 1 if the pin is configured as GPIO output.
+ * @param pinIndex Configured pins index.
+ * @return 1 if the pin is configured as GPIO output.
+ */
+static inline uint8_t is_output(int pinIndex)
+{
+  return get_pin_mode(pinIndex) != 0;
+}
+
+/**
  * @fn void write_all_ARD_pins(GPIO_PinState)
  * @brief Writes specified state to all GPIO pins configured as outputs.
  * @param pin_state Pin state to set.
@@ -35,8 +82,8 @@ static void write_all_ARD_pins(GPIO_PinState pin_state)
 {
   for (int i = 0; i < 10; i++)
   {
-    if (pins[i].port->MODER & pins[i].pin) // the pin is output
-      HAL_GPIO_WritePin(pins[i].port, pins[i].pin, pin_state);
+    if (is_output(i)) // the pin is output
+      HAL_GPIO_WritePin(pins[i].port, pins[i].bit, pin_state);
   }
 }
 
@@ -48,9 +95,9 @@ static void scan_inputs()
 {
   for (int i = 0; i < 10; i++)
   {
-    if (pins[i].port->MODER & pins[i].pin) continue; // ignore outputs
+    if (is_output(i)) continue; // ignore outputs
     GPIO_PinState lastState = pins[i].state;
-    GPIO_PinState currentState = HAL_GPIO_ReadPin(pins[i].port, pins[i].pin);
+    GPIO_PinState currentState = HAL_GPIO_ReadPin(pins[i].port, pins[i].bit);
     if (currentState != lastState)
     {
       if (currentState == GPIO_PIN_SET)
